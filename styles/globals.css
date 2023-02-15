@@ -71,3 +71,7 @@ button {
 .calculator{
   text-align: center;
 }
+
+.activeLink{
+  border: 2px solid black;
+}

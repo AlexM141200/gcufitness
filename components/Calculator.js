@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 const Calculator = () => {
   const userInfo = {
     age: "22",
@@ -7,13 +9,26 @@ const Calculator = () => {
     activityLevel: "1.5",
   };
 
+  function calculate(e) {
+    e.preventDefault();
+    const weight = parseFloat(document.getElementById("weightKG").value);
+    const height = parseFloat(document.getElementById("heightCM").value);
+    const age = parseInt(document.getElementById("age").value);
+    const activityLevel = parseFloat(
+      document.getElementById("activityLevel").value
+    );
+    const calculatedCalories =
+      (66.5 + 13.75 * weight + 5.003 * height - 4.676 * age) * activityLevel;
+    setCalories(calculatedCalories);
+  }
+
   const BMR =
     66.5 +
     13.75 * userInfo.weight +
     5.003 * userInfo.height -
     4.676 * userInfo.age;
 
-  function calculate() {}
+  const [calories, setCalories] = useState(null);
 
   return (
     <div className="calculator">
@@ -22,7 +37,7 @@ const Calculator = () => {
         <input type="text" name="weightKG" id="weightKG" />
         <br />
         <label htmlFor="heightCM">What is your height in CM?</label>
-        <input type="text" name="heightCM" id="weightCM" />
+        <input type="text" name="heightCM" id="heightCM" />
         <br />
         <label htmlFor="age">What is your age</label>
         <input type="number" name="age" id="age" />
@@ -31,9 +46,9 @@ const Calculator = () => {
           {" "}
           What is your activity level? (Refer to Table Below!)
         </label>
-        <select className="activityLevel">
+        <select className="activityLevel" id="activityLevel">
           <option value="1.2">1.2 - Sedentary</option>
-          <option value="1.375">1375 - Light Activity</option>
+          <option value="1.375">1.375 - Light Activity</option>
           <option value="1.5">1.550 - Moderate-Intense Activity</option>
           <option value="1.725">1.725 - Heavy Activity</option>
           <option value="1.9">1.9 - Rigorous Activity</option>
@@ -42,10 +57,7 @@ const Calculator = () => {
         <button type="submit"> Calculate!</button>
       </form>
 
-      <p>
-        Your Basal Metabolic Rate is {Math.round(BMR * userInfo.activityLevel)}{" "}
-        calories.
-      </p>
+      {calories !== null && <p>Your calories are {calories.toFixed(2)}</p>}
 
       <div className="activityLevelExplain">
         <h2>Activity Level Explained!</h2>

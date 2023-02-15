@@ -57,6 +57,16 @@ const NavBar = () => {
       >
         Workout Planner
       </Link>
+      {user ? (
+        <Link
+          href="/profile"
+          className={activeLink === "/profile" ? "active" : ""}
+        >
+          Profile
+        </Link>
+      ) : (
+        ""
+      )}
       {!user ? (
         <Button shadow color="gradient" auto onPress={login} size="xs">
           Login
