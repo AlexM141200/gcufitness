@@ -1,14 +1,6 @@
 import React, { useState } from "react";
 
 const Calculator = () => {
-  const userInfo = {
-    age: "22",
-    gender: "male",
-    weight: "57",
-    height: "160",
-    activityLevel: "1.5",
-  };
-
   function calculate(e) {
     e.preventDefault();
     const weight = parseFloat(document.getElementById("weightKG").value);
@@ -21,12 +13,6 @@ const Calculator = () => {
       (66.5 + 13.75 * weight + 5.003 * height - 4.676 * age) * activityLevel;
     setCalories(calculatedCalories);
   }
-
-  const BMR =
-    66.5 +
-    13.75 * userInfo.weight +
-    5.003 * userInfo.height -
-    4.676 * userInfo.age;
 
   const [calories, setCalories] = useState(null);
 
