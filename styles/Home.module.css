@@ -29,3 +29,19 @@
 .activeLink{
   border: 2px solid black;
 }
+
+.tab-headers {
+  display: flex;
+  gap: 16px; /* set the gap between buttons */
+}
+
+.tab-headers button {
+  padding: 8px; /* add some padding to the buttons */
+  background-color: #eee;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.tab-headers button:hover {
+  background-color: #ddd;
+}
