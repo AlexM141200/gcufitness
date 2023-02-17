@@ -1,11 +1,14 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Router, { useRouter } from "next/router";
-import { auth } from "../pages/firebase";
+import { auth, firestore } from "../pages/firebase";
 import { signInWithPopup, GoogleAuthProvider } from "@firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Button } from "@nextui-org/react";
 import { Avatar } from "@nextui-org/react";
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
 const NavBar = () => {
   const [user, setUser] = useAuthState(auth);
@@ -22,15 +25,26 @@ const NavBar = () => {
     };
   }, []);
 
-  const googleAuth = new GoogleAuthProvider();
+  // Create a new GoogleAuthProvider instance
+  const googleAuthProvider = new GoogleAuthProvider();
+
+  // Login function using GoogleAuthProvider
   const login = async () => {
-    const result = await signInWithPopup(auth, googleAuth);
+    try {
+      const result = await signInWithPopup(auth, googleAuthProvider);
+      const user = result.user;
+      const userRef = doc(firestore, "users", user.uid);
+      const userDoc = await getDoc(userRef);
+      if (!userDoc.exists()) {
+        // User details not found, redirect to userDetails page
+        Router.push("/userDetails");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
+  // Navbar component
   return (
     <nav>
       <div className="logo">
@@ -91,5 +105,4 @@ const NavBar = () => {
     </nav>
   );
 };
-
 export default NavBar;
