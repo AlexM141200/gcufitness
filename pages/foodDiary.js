@@ -1,6 +1,7 @@
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import React, { useState, useEffect } from "react";
+import AddBreakfast from "../components/AddBreakfast";
 
 const FoodDiary = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -40,13 +41,13 @@ const FoodDiary = () => {
         </button>
       </div>
 
-      <div class="container">
+      <div className="container">
         <div className="breakfast">
           <div className="foodItem">
             <h1>Breakfast</h1>
             <div className="foodData" style={{ borderRadius: "10px" }}>
               {foodData?.breakfast}
-              <button>Add Entry</button>
+              <AddBreakfast />
             </div>
           </div>
         </div>

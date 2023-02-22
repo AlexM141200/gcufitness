@@ -1,6 +1,6 @@
 const userDetails = () => {
   return;
-  <div> </div>;
+  <div></div>;
 };
 
 export default userDetails;
