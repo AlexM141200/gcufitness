@@ -28,6 +28,12 @@ const NavBar = () => {
   // Create a new GoogleAuthProvider instance
   const googleAuthProvider = new GoogleAuthProvider();
 
+  const userObject = {
+    foodDiary: {},
+    userGoals: {},
+    userWorkouts: {},
+  };
+
   // Login function using GoogleAuthProvider
   const login = async () => {
     try {
@@ -36,7 +42,20 @@ const NavBar = () => {
       const userRef = doc(firestore, "users", user.uid);
       const userDoc = await getDoc(userRef);
       if (!userDoc.exists()) {
-        // User details not found, redirect to userDetails page
+        await setDoc(userRef, {
+          foodDiary: firestore
+            .collection("users")
+            .doc()
+            .collection("foodDiary"),
+          userGoals: firestore
+            .collection("users")
+            .doc()
+            .collection("userGoals"),
+          userWorkouts: firestore
+            .collection("users")
+            .doc()
+            .collection("userWorkouts"),
+        });
         Router.push("/userDetails");
       }
     } catch (error) {

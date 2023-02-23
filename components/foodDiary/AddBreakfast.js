@@ -1,5 +1,5 @@
 import Modal from "react-modal";
-import NutritionSearch from "./NutritionSearch";
+import NutritionSearch from "../NutritionSearch";
 import React, { useState, useEffect } from "react";
 
 const customStyles = {

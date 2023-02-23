@@ -1,7 +1,7 @@
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import React, { useState, useEffect } from "react";
-import AddBreakfast from "../components/AddBreakfast";
+import AddBreakfast from "../components/foodDiary/AddBreakfast";
 
 const FoodDiary = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
