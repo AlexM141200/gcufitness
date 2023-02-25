@@ -1,14 +1,11 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Router, { useRouter } from "next/router";
-import { auth, firestore } from "../pages/firebase";
-import { signInWithPopup, GoogleAuthProvider } from "@firebase/auth";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { Button } from "@nextui-org/react";
 import { Avatar } from "@nextui-org/react";
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import { useAuthState } from "react-firebase-hooks/auth";
+import Login from "./Login.js";
+import { auth } from "../pages/firebase";
 
 const NavBar = () => {
   const [user, setUser] = useAuthState(auth);
@@ -25,42 +22,10 @@ const NavBar = () => {
     };
   }, []);
 
-  // Create a new GoogleAuthProvider instance
-  const googleAuthProvider = new GoogleAuthProvider();
-
   const userObject = {
     foodDiary: {},
     userGoals: {},
     userWorkouts: {},
-  };
-
-  // Login function using GoogleAuthProvider
-  const login = async () => {
-    try {
-      const result = await signInWithPopup(auth, googleAuthProvider);
-      const user = result.user;
-      const userRef = doc(firestore, "users", user.uid);
-      const userDoc = await getDoc(userRef);
-      if (!userDoc.exists()) {
-        await setDoc(userRef, {
-          foodDiary: firestore
-            .collection("users")
-            .doc()
-            .collection("foodDiary"),
-          userGoals: firestore
-            .collection("users")
-            .doc()
-            .collection("userGoals"),
-          userWorkouts: firestore
-            .collection("users")
-            .doc()
-            .collection("userWorkouts"),
-        });
-        Router.push("/userDetails");
-      }
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   // Navbar component
@@ -100,13 +65,7 @@ const NavBar = () => {
       ) : (
         ""
       )}
-      {!user ? (
-        <Button shadow color="gradient" auto onPress={login} size="xs">
-          Login
-        </Button>
-      ) : (
-        ""
-      )}
+      {!user ? <Login /> : ""}
       {user ? <Avatar src={user.photoURL} size="md" /> : ""}
       {user ? (
         <Button
