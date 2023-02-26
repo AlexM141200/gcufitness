@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { auth } from "../../pages/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 function WorkoutItem({ name, url }) {
   return (

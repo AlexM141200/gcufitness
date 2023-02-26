@@ -41,37 +41,35 @@ const CardLinks = () => {
   ];
 
   return (
-    <>
-      <Grid.Container gap={3}>
-        {Object.keys(cardInfo).map((key, i) => (
-          <Grid sm={12} md={4}>
-            <Card isPressable isHoverable css={{ mw: "330px" }}>
-              <Card.Header
-                css={{ position: "absolute", zIndex: 1, top: 5 }}
-              ></Card.Header>
-              <Card.Divider />
-              <Card.Body css={{ p: 0 }}>
-                <Link href={cardInfo[key].linkTo}>
-                  <Card.Image
-                    src={cardInfo[key].source}
-                    width="100%"
-                    height="100%"
-                    objectFit="cover"
-                    alt={cardInfo[key].cardName}
-                  />
-                </Link>
-              </Card.Body>
-              <Card.Divider />
-              <Card.Footer>
-                <Text b css={{ color: "black" }}>
-                  {cardInfo[key].cardName}
-                </Text>
-              </Card.Footer>
-            </Card>
-          </Grid>
-        ))}
-      </Grid.Container>
-    </>
+    <Grid.Container gap={3}>
+      {Object.keys(cardInfo).map((key, i) => (
+        <Grid sm={12} md={4}>
+          <Card isPressable isHoverable css={{ mw: "330px" }}>
+            <Card.Header
+              css={{ position: "absolute", zIndex: 1, top: 5 }}
+            ></Card.Header>
+            <Card.Divider />
+            <Card.Body css={{ p: 0 }}>
+              <Link href={cardInfo[key].linkTo}>
+                <Card.Image
+                  src={cardInfo[key].source}
+                  width="100%"
+                  height="100%"
+                  objectFit="cover"
+                  alt={cardInfo[key].cardName}
+                />
+              </Link>
+            </Card.Body>
+            <Card.Divider />
+            <Card.Footer>
+              <Text b css={{ color: "black" }}>
+                {cardInfo[key].cardName}
+              </Text>
+            </Card.Footer>
+          </Card>
+        </Grid>
+      ))}
+    </Grid.Container>
   );
 };
 
