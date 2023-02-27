@@ -12,7 +12,7 @@ const CardLinks = () => {
       cardName: "Workout Planner",
       source:
         "https://static.vecteezy.com/system/resources/thumbnails/002/029/070/small/man-holding-a-dumbbell-in-a-gym-with-row-of-dumbbells-in-the-background-free-photo.jpg",
-      linkTo: "/workoutPlanner",
+      linkTo: "/workouts/workoutsHome",
     },
     {
       cardName: "Food Diary",

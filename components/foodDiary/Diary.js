@@ -1,10 +1,15 @@
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { setDefaultLocale, registerLocale } from "react-datepicker";
+import { doc, getDoc, setDoc, collection } from "firebase/firestore";
+import { enGB } from "date-fns/locale/en-GB";
 import React, { useState, useEffect } from "react";
 import AddBreakfast from "./AddBreakfast";
 import { auth, firestore } from "../../pages/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import GetDiaryEntries from "../GetDiaryEntries";
+
+registerLocale("enGB", enGB);
 
 const Diary = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -16,13 +21,20 @@ const Diary = () => {
   }, [selectedDate]);
 
   const fetchFoodData = async (date) => {
-    const diaryDate = selectedDate;
-    const diaryRef = firestore;
+    const userRef = doc(firestore, "users", user.uid);
+    const diaryDate = date.toLocaleDateString("en-GB").replace(/\//g, "-");
+    const diaryRef = doc(userRef, "foodDiary", diaryDate);
+    const diaryDoc = await getDoc(diaryRef);
+    if (diaryDoc.exists()) {
+      setFoodData(diaryDoc.data());
+      console.log(foodData);
+    } else {
+      console.log("no entries");
+    }
   };
 
   return (
     <div>
-      <GetDiaryEntries />
       <h1>Food Diary For Today</h1>
       <div className="date-picker-container">
         <button
@@ -35,6 +47,7 @@ const Diary = () => {
         <DatePicker
           selected={selectedDate}
           onChange={(date) => setSelectedDate(date)}
+          dateFormat="yyyy/dd/MM"
         />
         <button
           onClick={() =>

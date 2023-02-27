@@ -1,7 +1,8 @@
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, firestore } from "../pages/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
-const GetDiaryEntries = () => {
+const GetDiaryEntries = (dateOfEntry) => {
   const [user, loading, error] = useAuthState(auth);
   console.log(user);
   {
