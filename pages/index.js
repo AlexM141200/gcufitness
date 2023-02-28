@@ -15,7 +15,7 @@ export default function Home() {
       <CardLinks />
       <div className="container">
         <h1 className={styles.title}>Not sure where to start?</h1>
-        <Content />;
+        <Content />
       </div>
     </>
   );

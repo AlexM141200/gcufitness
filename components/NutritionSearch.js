@@ -5,7 +5,7 @@ class NutritionSearch extends React.Component {
   render() {
     return (
       <div>
-        <QueryAPI />;
+        <QueryAPI />
       </div>
     );
   }

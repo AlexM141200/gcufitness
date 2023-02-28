@@ -2,32 +2,37 @@
 
 body {
   background: linear-gradient(to right, #5f2c82, #49a09d);
-  
+
   color: #333;
   font-family: "Nunito";
 }
+
 a {
   color: white;
   text-decoration: none;
 }
+
 .content {
   max-width: 960px;
   margin: 0 auto;
 }
+
 nav {
   margin: 10px auto 80px;
   padding: 10px 0;
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  border-bottom: 1px solid #ddd;
 }
+
 nav a {
   margin-left: 12px;
 }
+
 nav .logo {
   margin-right: auto;
 }
+
 footer {
   display: block;
   text-align: center;
@@ -41,7 +46,9 @@ footer {
   border-bottom: 2px solid blue;
 }
 
-html,body, #root {
+html,
+body,
+#root {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -54,7 +61,7 @@ input {
 }
 
 button {
-  background-color:#ffcc66;
+  background-color: #ffcc66;
   border-radius: 4px;
   border-width: 1px;
 }
@@ -63,30 +70,34 @@ button {
   display: flex;
 }
 
-.activityLevel{
+.activityLevel {
   background-color: white;
   color: black;
 }
 
-.calculator{
+.calculator {
   text-align: center;
 }
 
-.activeLink{
+.activeLink {
   border: 2px solid black;
 }
 
 .tab-headers {
   display: flex;
-  gap: 16px; /* set the gap between buttons */
+  gap: 16px;
+  /* set the gap between buttons */
 }
+
 .tab-headers button {
-  padding: 8px; /* add some padding to the buttons */
+  padding: 8px;
+  /* add some padding to the buttons */
   background-color: #eee;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
+
 .tab-headers button:hover {
   background-color: #ddd;
 }

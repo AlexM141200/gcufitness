@@ -3,7 +3,7 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, firestore } from "../pages/firebase";
-import { doc, getDoc, setDoc, collection } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 const UserProfile = () => {
   const [user, setUser, loading, error] = useAuthState(auth);
@@ -34,12 +34,36 @@ const UserProfile = () => {
     if (profileDoc.exists()) {
       setUserData(profileDoc.data());
     } else {
-      console.log("no entries");
+      setUserData({
+        height: 0,
+        weight: 0,
+        age: 0,
+        activityLevel: 0,
+      });
     }
   };
 
   const handleEdit = (field) => {
-    setEditableFields((prevState) => ({ ...prevState, [field]: true }));
+    if (userData) {
+      setEditableFields((prevState) => ({ ...prevState, [field]: true }));
+      setUpdatedFields((prevState) => ({
+        ...prevState,
+        [field]: userData[field],
+      }));
+    } else {
+      const defaultData = {
+        height: 0,
+        weight: 0,
+        age: 0,
+        activityLevel: 0,
+      };
+      setUserData(defaultData);
+      setEditableFields((prevState) => ({ ...prevState, [field]: true }));
+      setUpdatedFields((prevState) => ({
+        ...prevState,
+        [field]: defaultData[field],
+      }));
+    }
   };
 
   const handleCancel = (field) => {

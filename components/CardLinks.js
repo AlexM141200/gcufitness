@@ -43,7 +43,7 @@ const CardLinks = () => {
   return (
     <Grid.Container gap={3}>
       {Object.keys(cardInfo).map((key, i) => (
-        <Grid sm={12} md={4}>
+        <Grid key={i} sm={12} md={4}>
           <Card isPressable isHoverable css={{ mw: "330px" }}>
             <Card.Header
               css={{ position: "absolute", zIndex: 1, top: 5 }}
