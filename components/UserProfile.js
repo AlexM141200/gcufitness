@@ -1,93 +1,177 @@
 import React, { useState, useEffect } from "react";
 import firebase from "firebase/app";
 import "firebase/firestore";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth, firestore } from "../pages/firebase";
+import { doc, getDoc, setDoc, collection } from "firebase/firestore";
 
-const UserProfile = ({ userId }) => {
-  const [userData, setUserData] = useState({});
-  const [isEditing, setIsEditing] = useState(false);
-  const [updatedData, setUpdatedData] = useState({});
-
-  const db = firebase.firestore();
-  const userRef = db.collection("users").doc(userId);
+const UserProfile = () => {
+  const [user, setUser, loading, error] = useAuthState(auth);
+  const [userData, setUserData] = useState(null);
+  const [editableFields, setEditableFields] = useState({
+    height: false,
+    weight: false,
+    age: false,
+    activityLevel: false,
+  });
+  const [updatedFields, setUpdatedFields] = useState({
+    height: 0,
+    weight: 0,
+    age: 0,
+    activityLevel: 0,
+  });
 
   useEffect(() => {
-    userRef.get().then((doc) => {
-      if (doc.exists) {
-        setUserData(doc.data());
-      } else {
-        console.log("No such document!");
-      }
-    });
-  }, [userRef]);
+    if (user) {
+      fetchUserData(user);
+    }
+  }, [user]);
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setUpdatedData({ ...updatedData, [name]: value });
-  };
-
-  const handleEditClick = (field) => {
-    setIsEditing(true);
-    setUpdatedData({ ...updatedData, [field]: userData[field] });
-  };
-
-  const handleCancelClick = () => {
-    setIsEditing(false);
-    setUpdatedData({});
-  };
-
-  const handleSaveClick = () => {
-    userRef
-      .update(updatedData)
-      .then(() => {
-        setIsEditing(false);
-        setUserData({ ...userData, ...updatedData });
-        setUpdatedData({});
-      })
-      .catch((error) => {
-        console.error("Error updating document: ", error);
-      });
-  };
-
-  const renderField = (fieldName, fieldValue) => {
-    if (isEditing) {
-      return (
-        <div>
-          <label htmlFor={fieldName}>{fieldName}</label>
-          <input
-            type="text"
-            name={fieldName}
-            value={updatedData[fieldName] || fieldValue || ""}
-            onChange={handleInputChange}
-          />
-        </div>
-      );
+  const fetchUserData = async (user) => {
+    const userRef = doc(firestore, "users", user.uid);
+    const profileRef = doc(userRef, "userGoals", "userProfile");
+    const profileDoc = await getDoc(profileRef);
+    if (profileDoc.exists()) {
+      setUserData(profileDoc.data());
     } else {
-      return (
-        <div>
-          <span>{fieldName}: </span>
-          <span>{fieldValue}</span>
-          <button onClick={() => handleEditClick(fieldName)}>Edit</button>
-        </div>
-      );
+      console.log("no entries");
     }
   };
 
+  const handleEdit = (field) => {
+    setEditableFields((prevState) => ({ ...prevState, [field]: true }));
+  };
+
+  const handleCancel = (field) => {
+    setEditableFields((prevState) => ({ ...prevState, [field]: false }));
+    setUpdatedFields((prevState) => ({ ...prevState, [field]: "" }));
+  };
+
+  const handleSave = async (field) => {
+    const userRef = doc(firestore, "users", user.uid);
+    const profileRef = doc(userRef, "userGoals", "userProfile");
+    const updatedData = {
+      ...userData,
+      [field]: Number(updatedFields[field]),
+    };
+    await setDoc(profileRef, updatedData);
+    setUserData(updatedData);
+    setEditableFields((prevState) => ({ ...prevState, [field]: false }));
+  };
+
+  const handleChange = (field, value) => {
+    setUpdatedFields((prevState) => ({ ...prevState, [field]: value }));
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
-    <div>
-      <h2>User Profile</h2>
-      {Object.keys(userData).map((fieldName) => {
-        return (
-          <div key={fieldName}>
-            {renderField(fieldName, userData[fieldName])}
-          </div>
-        );
-      })}
-      {isEditing && (
-        <div>
-          <button onClick={handleSaveClick}>Save</button>
-          <button onClick={handleCancelClick}>Cancel</button>
-        </div>
-      )}
+    <div className="user-profile">
+      <h1>User Profile</h1>
+      <div className="user-data">
+        {userData && (
+          <>
+            <div className="field">
+              <label>Height:</label>
+              {editableFields.height ? (
+                <>
+                  <input
+                    type="number"
+                    value={updatedFields.height}
+                    onChange={(e) =>
+                      handleChange("height", e.target.value)
+                    }
+                  />
+                  <button onClick={() => handleSave("height")}>Save</button>
+                  <button onClick={() => handleCancel("height")}>
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p>{userData.height}</p>
+                  <button onClick={() => handleEdit("height")}>Edit</button>
+                </>
+              )}
+            </div>
+            <div className="field">
+              <label>Weight:</label>
+              {editableFields.weight ? (
+                <>
+                  <input
+                    type="number"
+                    value={updatedFields.weight}
+                    onChange={(e) =>
+                      handleChange("weight", e.target.value)
+                    }
+                  />
+                  <button onClick={() => handleSave("weight")}>Save</button>
+                  <button onClick={() => handleCancel("weight")}>
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p>{userData.weight}</p>
+                  <button onClick={() => handleEdit("weight")}>Edit</button>
+                </>
+              )}
+            </div>
+            <div className="field">
+              <label>Age:</label>
+              {editableFields.age ? (
+                <>
+                  <input
+                    type="number"
+                    value={updatedFields.age}
+                    onChange={(e) => handleChange("age", e.target.value)}
+                  />
+                  <button onClick={() => handleSave("age")}>Save</button>
+                  <button onClick={() => handleCancel("age")}>Cancel</button>
+                </>
+              ) : (
+                <>
+                  <p>{userData.age}</p>
+                  <button onClick={() => handleEdit("age")}>Edit</button>
+                </>
+              )}
+            </div>
+            <div className="field">
+              <label>Activity Level:</label>
+              {editableFields.activityLevel ? (
+                <>
+                  <input
+                    type="number"
+                    value={updatedFields.activityLevel}
+                    onChange={(e) =>
+                      handleChange("activityLevel", e.target.value)
+                    }
+                  />
+                  <button onClick={() => handleSave("activityLevel")}>
+                    Save
+                  </button>
+                  <button onClick={() => handleCancel("activityLevel")}>
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p>{userData.activityLevel}</p>
+                  <button onClick={() => handleEdit("activityLevel")}>
+                    Edit
+                  </button>
+                </>
+              )}
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 };
