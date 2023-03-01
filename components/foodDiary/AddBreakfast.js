@@ -1,20 +1,9 @@
 import Modal from "react-modal";
 import NutritionSearch from "../NutritionSearch";
 import React, { useState, useEffect } from "react";
-
-const customStyles = {
-  content: {
-    color: "black",
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    overflow: "auto",
-    maxHeight: "calc(100vh - 210px)",
-  },
-};
+import { auth } from "../../pages/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { firestore } from "../../pages/firebase";
 
 function AddBreakfast() {
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -35,7 +24,6 @@ function AddBreakfast() {
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
-        style={customStyles}
       >
         <NutritionSearch />
       </Modal>
