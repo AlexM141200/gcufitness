@@ -50,24 +50,30 @@ const NavBar = () => {
       <Link href="/" className={activeLink === "/" ? "active" : ""}>
         Home
       </Link>
-      <Link
-        href="/foodDiary"
-        className={activeLink === "/foodDiary" ? "active" : ""}
-      >
-        Food Diary
-      </Link>
-      <Link
-        href="/calorieTracker"
-        className={activeLink === "/calorieTracker" ? "active" : ""}
-      >
-        Calorie Tracker
-      </Link>
-      <Link
-        href="/workoutPlanner"
-        className={activeLink === "/workoutPlanner" ? "active" : ""}
-      >
-        Workout Planner
-      </Link>
+      {user ? (
+        <div>
+          <Link
+            href="/foodDiary"
+            className={activeLink === "/foodDiary" ? "active" : ""}
+          >
+            Food Diary
+          </Link>
+          <Link
+            href="/calorieTracker"
+            className={activeLink === "/calorieTracker" ? "active" : ""}
+          >
+            Calorie Tracker
+          </Link>
+          <Link
+            href="/workoutPlanner"
+            className={activeLink === "/workoutPlanner" ? "active" : ""}
+          >
+            Workout Planner
+          </Link>
+        </div>
+      ) : (
+        ""
+      )}
       {!user ? (
         <Login />
       ) : (

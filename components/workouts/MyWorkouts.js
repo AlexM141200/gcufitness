@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { auth } from "../../pages/firebase";
+import { useState, useEffect } from "react";
+import { auth, firestore } from "../../pages/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 
 function WorkoutItem({ name, url }) {
   return (
@@ -12,12 +13,40 @@ function WorkoutItem({ name, url }) {
 
 function MyWorkouts() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [workouts, setWorkouts] = useState([
-    { id: 1, name: "Workout 1", url: "https://example.com/workout1" },
-    { id: 2, name: "Workout 2", url: "https://example.com/workout2" },
-    { id: 3, name: "Workout 3", url: "https://example.com/workout3" },
-    { id: 4, name: "Workout 4", url: "https://example.com/workout4" },
-  ]);
+  const [workouts, setWorkouts] = useState([]);
+
+  const [user, loading, error] = useAuthState(auth);
+
+  useEffect(() => {
+    const fetchWorkouts = async () => {
+      if (user) {
+        const userRef = doc(firestore, "users", user.uid);
+        const myWorkoutsRef = doc(userRef, "userWorkouts", "myWorkouts");
+        const myWorkoutsDoc = await getDoc(myWorkoutsRef);
+
+        if (myWorkoutsDoc.exists()) {
+          const workoutNames = [];
+
+          // Get the names of each collection within the myWorkouts document
+          const collectionRefs = await getDocs(myWorkoutsDoc.ref.listCollections());
+          collectionRefs.forEach((collectionRef) => {
+            workoutNames.push(collectionRef.id);
+          });
+
+          // Update state with the list of workout names
+          setWorkouts(
+            workoutNames.map((name) => ({
+              id: name,
+              name: name,
+              url: `/userWorkouts/myWorkouts/${name}`,
+            }))
+          );
+        }
+      }
+    };
+
+    fetchWorkouts();
+  }, [user]);
 
   const handleSearchTermChange = (event) => {
     setSearchTerm(event.target.value);

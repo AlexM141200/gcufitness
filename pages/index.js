@@ -14,7 +14,7 @@ export default function Home() {
       <h1 className={styles.title}>Welcome to GCU Fitness Tracking</h1>
       <CardLinks />
       <div className="container">
-        <h1 className={styles.title}>Not sure where to start?</h1>
+        <h1 className={styles.title}>Why you should start your fitness journey!</h1>
         <Content />
       </div>
     </>

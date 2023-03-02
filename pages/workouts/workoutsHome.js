@@ -8,11 +8,13 @@ const workoutsHome = () => {
       <Grid.Container gap={1}>
         {goalData.map((item, index) => (
           <Grid key={index} lg={3} md={3}>
+
             <Card isPressable isHoverable css={{ mw: "330px" }}>
               <Card.Image src={item.image} />
               <Card.Body>
                 <h2>{item.title}</h2>
                 <p>{item.description}</p>
+                <Link href={item.linkTo}>Link</Link>
               </Card.Body>
             </Card>
           </Grid>
