@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
   return (
     <>
-      <h1 className={styles.title}>Welcome to GCU Fitness Tracking</h1>
+      <h1 className={styles.title}>Welcome to IntelliTrack!</h1>
       <CardLinks />
       <div className="container">
         <h1 className={styles.title}>Why you should start your fitness journey!</h1>

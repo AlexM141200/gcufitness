@@ -2,15 +2,46 @@
     text-align: center;
 }
 
+.field {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.field:hover {
+    background-color: rgb(77, 75, 75);
+}
+
+.field:nth-child(even) {
+    background: darkgray;
+}
+
 
 
 .userData {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: left;
+    justify-content: left;
     margin: 0 auto;
     width: 50%;
     background-color: grey;
     border-radius: 5%;
+    border-bottom-left-radius: 5%;
+    border-bottom-right-radius: 5%;
+    color: black;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    padding: .25rem;
+}
+
+.values {
+    display: flex;
+    align-items: center;
+    padding: .25rem;
 }
