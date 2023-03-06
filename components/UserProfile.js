@@ -4,6 +4,8 @@ import "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, firestore } from "../pages/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import styles from "../styles/Profile.module.css";
+import EditableField from "./EditableField";
 
 const UserProfile = () => {
   const [user, setUser, loading, error] = useAuthState(auth);
@@ -97,8 +99,8 @@ const UserProfile = () => {
 
   return (
     <div className="user-profile">
-      <h1>User Profile</h1>
-      <div className="user-data">
+      <h1 className={styles.profileTitle}>User Profile</h1>
+      <div className={styles.userData}>
         {userData && (
           <>
             <div className="field">
