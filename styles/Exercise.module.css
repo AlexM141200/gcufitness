@@ -1,0 +1,14 @@
+.nav {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 5px;
+}
+
+.button {
+    color: white;
+    margin: .25rem;
+    background: linear-gradient(to right, #868f96 0%, #596164 100%);
+    border: 1px solid #1c1d1d;
+    padding: 5px;
+}

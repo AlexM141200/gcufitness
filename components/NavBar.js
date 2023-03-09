@@ -6,7 +6,7 @@ import { Avatar } from "@nextui-org/react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Login from "./Login.js";
 import { auth } from "../pages/firebase";
-import { Tooltip } from "@nextui-org/react";
+import { Tooltip, Image } from "@nextui-org/react";
 
 const NavBar = () => {
   const [user, setUser] = useAuthState(auth);
@@ -42,11 +42,12 @@ const NavBar = () => {
     userWorkouts: {},
   };
 
+
+
   return (
+
     <nav>
-      <div className="logo">
-        <h1 style={{ lineHeight: "20px" }}>GCUFitness</h1>
-      </div>
+      <Image src="/img/IntelliTech.png" alt="IntelliTech Logo" height={100} width={200} objectFit="contain" style={{ padding: "5px" }} />
       <Link href="/" className={activeLink === "/" ? "active" : ""}>
         Home
       </Link>
