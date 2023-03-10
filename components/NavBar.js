@@ -7,6 +7,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import Login from "./Login.js";
 import { auth } from "../pages/firebase";
 import { Tooltip, Image } from "@nextui-org/react";
+import styles from "../styles/Navbar.module.css";
 
 const NavBar = () => {
   const [user, setUser] = useAuthState(auth);
@@ -47,7 +48,7 @@ const NavBar = () => {
   return (
 
     <nav>
-      <Image src="/img/IntelliTech.png" alt="IntelliTech Logo" height={100} width={200} objectFit="contain" style={{ padding: "5px" }} />
+      <img className={styles.logo} src="/img/IntelliTech.png" alt="IntelliTech Logo" />
       <Link href="/" className={activeLink === "/" ? "active" : ""}>
         Home
       </Link>
