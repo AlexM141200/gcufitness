@@ -83,7 +83,7 @@ const NavBar = () => {
               href="/workoutPlanner"
               className={activeLink === "/workoutPlanner" ? "active" : ""}
             >
-              Workout Planner
+              Workouts
             </Link>
           </Navbar.Item>
         </Navbar.Content>

@@ -1,0 +1,103 @@
+.heroContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+}
+
+.imageContainer {
+    position: relative;
+    width: 100%;
+    height: 10rem;
+}
+
+.heroImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.heroImage:first-child {
+    z-index: 2;
+    animation: float 3s ease-in-out infinite alternate;
+}
+
+.heroImage:last-child {
+    z-index: 1;
+    animation: float2 5s ease-in-out infinite alternate;
+
+}
+
+.card {
+    margin-bottom: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    background-color: #A9A9A9;
+    padding: 2px;
+    border-radius: 30px;
+    text-align: center;
+    display: inline-block;
+    width: 30%;
+    vertical-align: top;
+    overflow: hidden;
+}
+
+.card h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.card p {
+    font-size: 1.2em;
+    line-height: 1.5;
+    margin-top: 1rem;
+    color: black;
+    overflow: hidden;
+    padding: 0 10px;
+}
+
+
+
+.cardContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    gap: 2rem;
+
+}
+
+
+
+@keyframes float {
+    0% {
+        transform: translatey(0px);
+    }
+
+    50% {
+        transform: translatey(-30px);
+    }
+
+    100% {
+        transform: translatey(0px);
+    }
+}
+
+@keyframes float2 {
+    0% {
+        transform: translatey(0px);
+        transform-origin: center bottom;
+    }
+
+    50% {
+        transform: scaleY(1.5);
+        transform-origin: center bottom;
+    }
+
+    100% {
+        transform: translatey(0px);
+        transform-origin: center bottom;
+    }
+}

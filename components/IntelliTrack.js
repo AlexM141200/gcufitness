@@ -4,4 +4,3 @@ export const IntelliTrack = () => (
     <img src={logo} />
 
 );
-console.log(logo);
