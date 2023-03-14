@@ -6,6 +6,8 @@ import Login from "./Login.js";
 import { auth } from "../pages/firebase";
 import styles from "../styles/Navbar.module.css";
 import { Navbar, Dropdown, Button, Text, Avatar, Tooltip, Image, useTheme } from "@nextui-org/react";
+import { useWindowSize } from "@react-hook/window-size";
+
 
 const NavBar = () => {
   const [user, setUser] = useAuthState(auth);
@@ -36,12 +38,14 @@ const NavBar = () => {
   }, []);
 
   const { isDark } = useTheme();
-  const { width } = useViewport;
+  const [width, height] = useWindowSize();
   const isSmallScreen = width < 768;
 
   return (
-
-    <Navbar css={styles} variant="sticky" style={{ top: 0, paddingTop: "0" }} fluid={isSmallScreen}>
+    <Navbar isCompact shadow variant="sticky" css={{
+      top: 0, paddingTop: "0", $$navbarBackgroundColor: "transparent",
+      $$navbarBlurBackgroundColor: "transparent", borderRadius: "10px"
+    }} maxWidth="100vw" fluid={isSmallScreen}>
       <Navbar.Brand>
         <img className={styles.logo} src="/img/IntelliTech.png" alt="IntelliTech Logo" />
       </Navbar.Brand>

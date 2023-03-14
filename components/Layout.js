@@ -1,11 +1,15 @@
 import NavBar from "./NavBar";
+import { Box } from "./Box";
 
 const Layout = ({ children }) => {
   return (
-    <div className="content">
-      <NavBar />
+    <Box
+      css={{
+        maxW: "100%"
+      }}
+    >
       {children}
-    </div>
+    </Box>
   );
 };
 
