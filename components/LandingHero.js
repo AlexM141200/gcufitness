@@ -10,11 +10,11 @@ const LandingHero = () => {
         <div>
             <div className={styles.heroContainer}>
                 <div className={styles.imageContainer}>
-                    <img className={styles.heroImage} src="/img/IntelliTech.png" alt="IntelliTech Logo" />
-                    <img className={styles.heroImage} src="/img/fireflies.png" alt="IntelliTech Logo" />
+                    <img className={styles.heroImage} src="/img/IntelliTrack.svg" alt="IntelliTech Logo" />
+                    <img className={styles.heroImage} src="/img/Sprinkle.svg" alt="IntelliTech Logo" />
                 </div>
                 <h1 className={styles.title} style={{ marginLeft: "4rem" }}>
-                    Become the best version of yourself!
+                    Empower your body and mind
                 </h1>
             </div>
             <br />

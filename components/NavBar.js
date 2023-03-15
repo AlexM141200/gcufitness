@@ -93,7 +93,7 @@ const NavBar = () => {
                 description="Browse through a comprehensive collection of exercises that target various muscle groups and movements. "
               >
                 <Link
-                  href={"/workout"}
+                  href={"/exerciseLibrary"}
                 > Exercise Library</Link>
 
               </Dropdown.Item>
