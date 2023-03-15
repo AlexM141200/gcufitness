@@ -1,13 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap');
 
 body {
-  background-image: url('/img/Polygon.svg'), radial-gradient(circle at 24.1% 68.8%, rgb(50, 50, 50) 0%, rgb(0, 0, 0) 99.4%);
+  background-image: radial-gradient(circle at 24.1% 68.8%, rgb(50, 50, 50) 0%, rgb(0, 0, 0) 99.4%);
   background-repeat: repeat-x, repeat-y;
   background-position: center;
   background-size: 100vw auto;
   min-height: 100vh;
   color: #333;
   font-family: "Nunito";
+}
+
+.landing-page {
+  background-image: url('/img/Polygon.svg'), radial-gradient(circle at 24.1% 68.8%, rgb(50, 50, 50) 0%, rgb(0, 0, 0) 99.4%);
+  background-size: cover;
+  background-position: center bottom;
+  scale: 1;
 }
 
 

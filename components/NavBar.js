@@ -47,19 +47,19 @@ const NavBar = () => {
           variant="underline"
         >
           <Navbar.Item width={isSmallScreen ? 'auto' : '1/4'}>
-            <Navbar.Link block css={{ color: "white" }} href="/" >
+            <Navbar.Link block color="secondary" css={{ color: "white" }} href="/" >
               Home
             </Navbar.Link>
           </Navbar.Item>
           <Navbar.Item width={isSmallScreen ? 'auto' : '1/4'}>
-            <Navbar.Link block css={{ color: "white" }}
+            <Navbar.Link block color="secondary" css={{ color: "white" }}
               href="/foodDiary"
             >
               Food Diary
             </Navbar.Link>
           </Navbar.Item>
           <Navbar.Item width={isSmallScreen ? 'auto' : '1/4'}>
-            <Navbar.Link block css={{ color: "white" }}
+            <Navbar.Link block color="secondary" css={{ color: "white" }}
               href="/calorieTracker"
             >
               Calorie Tracker
@@ -91,6 +91,7 @@ const NavBar = () => {
                 key="autoscaling"
                 showFullDescription
                 description="Browse through a comprehensive collection of exercises that target various muscle groups and movements. "
+                icon={<Image src="/img/dumbbellHeart.png" height="50px" />}
               >
                 <Link
                   href={"/exerciseLibrary"}
@@ -101,7 +102,7 @@ const NavBar = () => {
                 key="usage_metrics"
                 showFullDescription
                 description="Build muscle and increase strength with our carefully curated strength workouts."
-
+                icon={<Image src="/img/weightlifter.png" height="50px" />}
               >
                 <Link href={"/workouts/strengthWorkouts"}>Strength Workouts</Link>
 
@@ -110,6 +111,7 @@ const NavBar = () => {
                 key="production_ready"
                 showFullDescription
                 description="Get your heart pumping and improve your cardiovascular health with our selection of cardio workouts. "
+                icon={<Image src="/img/treadmill.png" height="50px" />}
 
               >
                 <Link href={"/workouts/cardioWorkouts"}>Cardio Workouts</Link>
@@ -117,8 +119,8 @@ const NavBar = () => {
               <Dropdown.Item
                 key="99_uptime"
                 showFullDescription
-                description="Applications stay on the grid with high availability and high uptime guarantees."
-
+                description="More experienced lifter? Create your own custom workout plan and track progress."
+                icon={<Image src="/img/writing.png" height="50px" />}
               >
                 <Link href={"/workouts/createWorkout"}>Create Custom Workout Plan</Link>
               </Dropdown.Item>
