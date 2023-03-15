@@ -11,7 +11,7 @@ const LandingHero = () => {
             <div className={styles.heroContainer}>
                 <div className={styles.imageContainer}>
                     <img className={styles.heroImage} src="/img/IntelliTrack.svg" alt="IntelliTech Logo" />
-                    <img className={styles.heroImage} src="/img/Sprinkle.svg" alt="IntelliTech Logo" />
+                    <img className={styles.heroImage} src="/img/Sprinkle.svg" alt="IntelliTech Logo" style={{ scale: ".85" }} />
                 </div>
                 <h1 className={styles.title} style={{ marginLeft: "4rem" }}>
                     Empower your body and mind
