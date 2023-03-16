@@ -10,6 +10,7 @@ export default function App({ Component, pageProps }) {
         <NavBar />
         <div className="content">
           <Component {...pageProps} />
+
         </div>
       </Layout>
     </NextUIProvider>

@@ -7,6 +7,10 @@ import React, { useState, useEffect } from "react";
 import AddBreakfast from "./AddBreakfast";
 import { auth, firestore } from "../../pages/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { Pie } from 'react-chartjs-2';
+import { Chart, ArcElement } from 'chart.js'
+import 'chart.js/auto';
+
 
 registerLocale("enGB", enGB);
 
@@ -18,6 +22,60 @@ const Diary = () => {
     lunch: [],
     dinner: [],
   });
+
+  const macroData = {
+    labels: ['Fats', 'Carbohydrates', 'Protein'],
+    datasets: [
+      {
+        label: '# of Votes',
+        data: [12, 19, 3],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const calorieData = {
+    labels: ['Daily Calories', 'Remaining Calories'],
+    datasets: [
+      {
+        label: 'Total Calories',
+        data: [1500, 2600],
+        backgroundColor: [
+          'rgba(54, 162, 235, 0.2)',
+          'rgb(102,153,204)'
+        ],
+        borderColor: [
+          'rgba(54, 162, 235, 0.2)',
+          'rgb(102,153,204, 0.2)'
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options = {
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+    },
+    elements: {
+      arc: {
+        borderWidth: 0
+      }
+    }
+  };
+
 
   useEffect(() => {
     if (user) {
@@ -246,7 +304,12 @@ const Diary = () => {
             <div className="totalProtein">Total Protein {foodData?.totalProtein}</div>
             <div className="totalFat">Total Fat {foodData?.totalFat}</div>
             <div className="totalCarbs">Total Carbs {foodData?.totalCarbs}</div>
-
+            <div style={{ width: 600, height: 400, display: "flex" }} >
+              <Pie data={calorieData} options={options} width={100} height={50}
+              />
+              <Pie data={macroData} options={options} width={100} height={50}
+              />
+            </div>
           </div>
         </div>
       ) : (

@@ -88,7 +88,17 @@ const NavBar = () => {
               }}
             >
               <Dropdown.Item
-                key="autoscaling"
+                key="userworkouts"
+                showFullDescription
+                description="The workout progress page tracks and logs your workouts, helping you achieve and maintain a healthy lifestyle. "
+                icon={<Image src="/img/calendar.png" height="50px" />}
+              >
+                <Link
+                  href={"/workouts/userWorkouts"}
+                > My Workouts</Link>
+              </Dropdown.Item>
+              <Dropdown.Item
+                key="exerciselibrary"
                 showFullDescription
                 description="Browse through a comprehensive collection of exercises that target various muscle groups and movements. "
                 icon={<Image src="/img/dumbbellHeart.png" height="50px" />}
@@ -99,7 +109,7 @@ const NavBar = () => {
 
               </Dropdown.Item>
               <Dropdown.Item
-                key="usage_metrics"
+                key="strengthworkouts"
                 showFullDescription
                 description="Build muscle and increase strength with our carefully curated strength workouts."
                 icon={<Image src="/img/weightlifter.png" height="50px" />}
@@ -108,7 +118,7 @@ const NavBar = () => {
 
               </Dropdown.Item>
               <Dropdown.Item
-                key="production_ready"
+                key="pcardioworkouts"
                 showFullDescription
                 description="Get your heart pumping and improve your cardiovascular health with our selection of cardio workouts. "
                 icon={<Image src="/img/treadmill.png" height="50px" />}
@@ -117,7 +127,7 @@ const NavBar = () => {
                 <Link href={"/workouts/cardioWorkouts"}>Cardio Workouts</Link>
               </Dropdown.Item>
               <Dropdown.Item
-                key="99_uptime"
+                key="customworkout"
                 showFullDescription
                 description="More experienced lifter? Create your own custom workout plan and track progress."
                 icon={<Image src="/img/writing.png" height="50px" />}
