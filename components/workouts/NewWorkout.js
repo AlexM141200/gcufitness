@@ -1,14 +1,15 @@
 import { useState } from "react";
-import { Dropdown } from "@nextui-org/react";
+import Modal from "react-modal";
 import StrengthExercise from "./StrengthExercise.js";
 import CardioExercise from "./CardioExercise.js";
 import WorkoutChild from "./WorkoutChild.js";
+import styles from "../../styles/createWorkout.module.css";
 
 
 function NewWorkout() {
-    const [selectedForm, setSelectedForm] = useState('Strength');
+    const [selectedForm, setSelectedForm] = useState(null);
     const [formData, setFormData] = useState({ strength: [], cardio: [] });
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleFormSubmit = (e, formType) => {
         e.preventDefault();
@@ -19,10 +20,7 @@ function NewWorkout() {
             [formType]: [...prevFormData[formType], Object.fromEntries(data)],
         }));
         form.reset();
-    };
-
-    const handleDropdownChange = (e) => {
-        setSelectedForm(e.target.value);
+        setIsModalOpen(false);
     };
 
     const handleDelete = (index, formType) => {
@@ -33,22 +31,43 @@ function NewWorkout() {
         });
     };
 
+    const handleOpenForm = (formType) => {
+        setSelectedForm(formType);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseForm = () => {
+        setSelectedForm(null);
+        setIsModalOpen(false);
+    };
 
     return (
         <div>
             <h1>Create Workout</h1>
-            <select value={selectedForm} onChange={handleDropdownChange}>
-                <option value="strength">Strength Exercise</option>
-                <option value="cardio">Cardio Exercise</option>
-            </select>
-            {selectedForm === 'strength' ? (
-                <StrengthExercise onSubmit={(e) => handleFormSubmit(e, 'strength')} />
-            ) : (
-                <CardioExercise onSubmit={(e) => handleFormSubmit(e, 'cardio')} />
-            )}
+            <div>
+                <button onClick={() => handleOpenForm("strength")}>
+                    Add Strength Exercise
+                </button>
+                <button onClick={() => handleOpenForm("cardio")}>
+                    Add Cardio Exercise
+                </button>
+            </div>
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={handleCloseForm}
+                contentLabel="Exercise Form"
+                className={styles.modal}
+                overlayClassName={styles.modalOverlay}
+            >
+                {selectedForm === "strength" ? (
+                    <StrengthExercise onSubmit={(e) => handleFormSubmit(e, "strength")} />
+                ) : (
+                    <CardioExercise onSubmit={(e) => handleFormSubmit(e, "cardio")} />
+                )}
+            </Modal>
             <WorkoutChild formData={formData} onDelete={handleDelete} />
         </div>
     );
-};
+}
 
 export default NewWorkout;
