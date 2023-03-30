@@ -41,7 +41,11 @@
 
 }
 
-
+.bodyMind {
+    background: -webkit-linear-gradient(319deg, #663dff 0%, #aa00ff 37%, #cc4499 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
 @keyframes float {
     0% {

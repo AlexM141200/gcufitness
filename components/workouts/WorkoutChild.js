@@ -1,6 +1,7 @@
-import { Card } from "@nextui-org/react";
+import { Card, Button, Input } from "@nextui-org/react";
+import styles from "../../styles/WorkoutChild.module.css";
 
-function WorkoutChild({ formData, onDelete }) {
+function WorkoutChild({ formData, onDelete, saveWorkout }) {
     const strengthFormData = formData.strength;
     const cardioFormData = formData.cardio;
 
@@ -9,29 +10,51 @@ function WorkoutChild({ formData, onDelete }) {
     };
 
     return (
-        <div>
-            <h1> Strength Exercises</h1>
-            {strengthFormData.map((data, index) => (
-                <div key={`strength${index}`}>
-                    <Card css={{ bg: "$black", w: "100%", scale: ".8" }}>
-                        <p>Exercise Name: {data.name}</p>
-                        <p>Weight: {data.weight}</p>
-                        <p>Repetitions: {data.repetitions}</p>
-                        <p>Notes: {data.notes}</p>
-                        <button onClick={() => handleDelete(index, "strength")}>Delete</button>
-                    </Card>
+        <div className={styles.workoutContainer}>
+            <Card style={{ backgroundColor: "rgba(0,0,0, 0.4)", color: "white", padding: "35px" }}>
+                <div className={styles.inputContainer}>
+                    <Input clearable required labelPlaceholder="Workout Name" color="secondary" />
                 </div>
-            ))}
-            <h1>Cardio Exercises</h1>
-            {cardioFormData.map((data, index) => (
-                <div key={`cardio${index}`}>
-                    <p>Exercise Name: {data.name}</p>
-                    <p>Distance: {data.distance}</p>
-                    <p>Time: {data.time}</p>
-                    <p>Notes: {data.notes}</p>
-                    <button onClick={() => handleDelete(index, "cardio")}>Delete</button>
-                </div>
-            ))}
+                <h3> Strength Exercises</h3>
+                {strengthFormData.map((data, index) => (
+                    <div key={`strength${index}`}>
+                        <Card css={{ bg: "$black", w: "100%", scale: ".8", color: "white" }}>
+                            <div className={styles.exerciseContainer}>
+                                <p>Exercise Name: {data.name}</p>
+                                <p>Weight: {data.weight}</p>
+                                <p>Repetitions: {data.repetitions}</p>
+                                {data.notes !== "" && <p>Notes: {data.notes}</p>}
+                                <div className={styles.deleteButtonContainer}>
+                                    <Button color="gradient" onPress={() => handleDelete(index, "strength")}>Delete</Button>
+                                </div>
+                            </div>
+                        </Card>
+                    </div>
+                ))}
+                <h3>Cardio Exercises</h3>
+                {cardioFormData.map((data, index) => (
+                    <div key={`cardio${index}`}>
+                        <Card css={{ bg: "$black", w: "100%", scale: ".8", color: "white" }}>
+                            <div className={styles.exerciseContainer}>
+                                <p>Exercise Name: {data.name}</p>
+                                <p>Distance: {data.distance}</p>
+                                <p>Time: {data.time}</p>
+                                {data.notes !== "" && <p>Notes: {data.notes}</p>}
+                                <div className={styles.deleteButtonContainer}>
+                                    <Button color="gradient" onPress={() => handleDelete(index, "cardio")}>Delete</Button>
+                                </div>
+                            </div>
+                        </Card>
+                    </div>
+                ))}
+            </Card>
+            <div className={styles.saveButtonContainer}>
+                <Button shadow
+                    color="gradient"
+                    auto
+                    size="sm" className={styles.saveButton} onPress={() => saveWorkout()}>Save Workout
+                </Button>
+            </div>
         </div>
     );
 }

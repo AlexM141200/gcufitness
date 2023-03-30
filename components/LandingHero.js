@@ -14,7 +14,7 @@ const LandingHero = () => {
                     <img className={styles.heroImage} src="/img/Sprinkle.svg" alt="IntelliTech Logo" style={{ scale: ".85" }} />
                 </div>
                 <h1 className={styles.title} style={{ marginLeft: "4rem" }}>
-                    Empower your <span style={{ color: "magenta" }}>body</span> and <span style={{ color: "magenta" }}>mind</span>
+                    Empower your <span className={styles.bodyMind}>body </span> and <span className={styles.bodyMind}>mind</span>
                 </h1>
             </div>
             <br />

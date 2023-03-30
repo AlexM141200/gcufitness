@@ -36,3 +36,11 @@
     backdrop-filter: blur(10px);
     z-index: 9998;
 }
+
+.workoutContainer {
+    margin-top: -40px;
+}
+
+.buttonContainer {
+    margin-bottom: 10px;
+}

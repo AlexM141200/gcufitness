@@ -3,7 +3,11 @@ import Modal from "react-modal";
 import StrengthExercise from "./StrengthExercise.js";
 import CardioExercise from "./CardioExercise.js";
 import WorkoutChild from "./WorkoutChild.js";
-import styles from "../../styles/createWorkout.module.css";
+import styles from "../../styles/CreateWorkout.module.css";
+
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth, firestore } from "../../pages/firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 
 function NewWorkout() {
@@ -31,6 +35,10 @@ function NewWorkout() {
         });
     };
 
+    const saveWorkout = () => {
+
+    }
+
     const handleOpenForm = (formType) => {
         setSelectedForm(formType);
         setIsModalOpen(true);
@@ -42,9 +50,9 @@ function NewWorkout() {
     };
 
     return (
-        <div>
+        <div className={styles.workoutContainer}>
             <h1>Create Workout</h1>
-            <div>
+            <div className={styles.buttonContainer}>
                 <button onClick={() => handleOpenForm("strength")}>
                     Add Strength Exercise
                 </button>
@@ -65,7 +73,7 @@ function NewWorkout() {
                     <CardioExercise onSubmit={(e) => handleFormSubmit(e, "cardio")} />
                 )}
             </Modal>
-            <WorkoutChild formData={formData} onDelete={handleDelete} />
+            <WorkoutChild formData={formData} onDelete={handleDelete} saveWorkout={saveWorkout} />
         </div>
     );
 }

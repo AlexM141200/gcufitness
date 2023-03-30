@@ -1,0 +1,20 @@
+.saveButtonContainer {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+}
+
+.deleteButtonContainer {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+}
+
+.inputContainer {
+    width: 50%
+}
+
+.exerciseContainer {
+    display: flex;
+    flex-direction: column;
+}
