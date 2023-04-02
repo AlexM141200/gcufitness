@@ -112,3 +112,7 @@ button {
 .tab-headers button:hover {
   background-color: #ddd;
 }
+
+.modal-portal {
+  z-Index: 9999;
+}

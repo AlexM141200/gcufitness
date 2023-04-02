@@ -4,12 +4,14 @@ import { setDefaultLocale, registerLocale } from "react-datepicker";
 import { doc, getDoc, setDoc, collection, getDocs, docs } from "firebase/firestore";
 import { enGB } from "date-fns/locale/en-GB";
 import React, { useState, useEffect } from "react";
-import AddBreakfast from "./AddBreakfast";
+import AddEntry from "./AddEntry";
 import { auth, firestore } from "../../pages/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Pie } from 'react-chartjs-2';
 import { Chart, ArcElement } from 'chart.js'
 import 'chart.js/auto';
+import { Table } from "@nextui-org/react";
+
 
 
 registerLocale("enGB", enGB);
@@ -17,6 +19,7 @@ registerLocale("enGB", enGB);
 const Diary = () => {
   const [user, loading, error] = useAuthState(auth);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [dateInt, setDateInt] = useState(selectedDate.toDateString());
   const [foodData, setFoodData] = useState({
     breakfast: [],
     lunch: [],
@@ -76,18 +79,23 @@ const Diary = () => {
     }
   };
 
-
+  //change date based on selected date from date picker
   useEffect(() => {
     if (user) {
       fetchFoodData(selectedDate);
     }
+    const formattedDate = selectedDate.toDateString();
+    setDateInt(formattedDate);
   }, [selectedDate, user]);
 
   const fetchFoodData = async (date) => {
+
     const userRef = doc(firestore, "users", user.uid);
     const diaryDate = date.toLocaleDateString("en-GB").replace(/\//g, "-");
     const diaryRef = doc(userRef, "foodDiary", diaryDate);
     const diaryDocSnap = await getDoc(diaryRef);
+    console.log(diaryRef);
+    console.log(diaryDocSnap.data);
 
     if (diaryDocSnap.exists()) {
       const diaryData = diaryDocSnap.data();
@@ -100,6 +108,8 @@ const Diary = () => {
       // Retrieve all documents in the breakfast subcollection
       const breakfastQuerySnap = await getDocs(breakfastRef);
       const breakfastData = breakfastQuerySnap.docs.map((doc) => doc.data());
+      console.log(breakfastData);
+      console.log(breakfastQuerySnap);
 
       // Retrieve all documents in the lunch subcollection
       const lunchQuerySnap = await getDocs(lunchRef);
@@ -111,44 +121,44 @@ const Diary = () => {
 
       // Calculate total macronutrient values for breakfast
       const totalBreakfastCalories = breakfastData.reduce((total, item) => {
-        return total + item.calories_unit * item.units;
+        return total + item.calories;// * item.units;
       }, 0);
       const totalBreakfastProtein = breakfastData.reduce((total, item) => {
-        return total + item.protein_unit * item.units;
+        return total + item.protein;// * item.units;
       }, 0);
       const totalBreakfastFat = breakfastData.reduce((total, item) => {
-        return total + item.fat_unit * item.units;
+        return total + item.fat;// * item.units;
       }, 0);
       const totalBreakfastCarbs = breakfastData.reduce((total, item) => {
-        return total + item.carbs_unit * item.units;
+        return total + item.carbohydrates;// * item.units;
       }, 0);
 
       // Calculate total macronutrient values for breakfast
       const totalLunchCalories = lunchData.reduce((total, item) => {
-        return total + item.calories_unit * item.units;
+        return total + item.calories;// * item.units;
       }, 0);
       const totalLunchProtein = lunchData.reduce((total, item) => {
-        return total + item.protein_unit * item.units;
+        return total + item.protein;// * item.units;
       }, 0);
       const totalLunchFat = breakfastData.reduce((total, item) => {
-        return total + item.fat_unit * item.units;
+        return total + item.fat;// * item.units;
       }, 0);
       const totalLunchCarbs = lunchData.reduce((total, item) => {
-        return total + item.carbs_unit * item.units;
+        return total + item.carbohydrates;// * item.units;
       }, 0);
 
       // Calculate total macronutrient values for breakfast
       const totalDinnerCalories = dinnerData.reduce((total, item) => {
-        return total + item.calories_unit * item.units;
+        return total + item.calories;// * item.units;
       }, 0);
       const totalDinnerProtein = dinnerData.reduce((total, item) => {
-        return total + item.protein_unit * item.units;
+        return total + item.protein;// * item.units;
       }, 0);
       const totalDinnerFat = dinnerData.reduce((total, item) => {
-        return total + item.fat_unit * item.units;
+        return total + item.fat;// * item.units;
       }, 0);
       const totalDinnerCarbs = dinnerData.reduce((total, item) => {
-        return total + item.carbs_unit * item.units;
+        return total + item.carbohydrates;// * item.units;
       }, 0);
 
       const totalCalories = totalBreakfastCalories + totalLunchCalories + totalDinnerCalories;
@@ -186,10 +196,10 @@ const Diary = () => {
       // Calculate totals for breakfast, lunch, and dinner
       ["breakfast", "lunch", "dinner"].forEach((meal) => {
         foodData[meal].forEach((item) => {
-          totalCalories += item.calories_unit * item.units;
-          totalProtein += item.protein_unit * item.units;
-          totalFat += item.fat_unit * item.units;
-          totalCarbs += item.carbs_unit * item.units;
+          totalCalories += item.calories * item.units;
+          totalProtein += item.protein * item.units;
+          totalFat += item.fat * item.units;
+          totalCarbs += item.carbohydrates * item.units;
         });
       });
 
@@ -213,9 +223,6 @@ const Diary = () => {
       </>
     );
   };
-
-
-  console.log(foodData.breakfast);
 
   return (
     <>
@@ -252,13 +259,14 @@ const Diary = () => {
                   {foodData?.breakfast.map((item, index) => (
                     <div key={index}><p>Name: {item.name}</p>
                       <p>Units: {item.units}</p>
-                      <p>Calories: {item.calories_unit}</p>
-                      <p>Protein: {item.protein_unit}</p>
-                      <p>Carbs: {item.carbs_unit}</p>
-                      <p>Fat: {item.fat_unit}</p>
+                      <p>Calories: {item.calories}</p>
+                      <p>Protein: {item.protein}</p>
+                      <p>Carbs: {item.carbohydrates}</p>
+                      <p>Fat: {item.fat}</p>
                     </div>
+
                   ))}
-                  <AddBreakfast />
+                  <AddEntry meal={"breakfast"} date={dateInt} />
                 </div>
               </div>
             </div>
@@ -270,13 +278,13 @@ const Diary = () => {
                   {foodData?.lunch.map((item, index) => (
                     <div key={index}><p>Name: {item.name}</p>
                       <p>Units: {item.units}</p>
-                      <p>Calories: {item.calories_unit}</p>
-                      <p>Protein: {item.protein_unit}</p>
-                      <p>Carbs: {item.carbs_unit}</p>
-                      <p>Fat: {item.fat_unit}</p>
+                      <p>Calories: {item.calories}</p>
+                      <p>Protein: {item.protein}</p>
+                      <p>Carbs: {item.carbohydrates}</p>
+                      <p>Fat: {item.fat}</p>
                     </div>
                   ))}
-                  <button>Add Entry</button>
+                  <AddEntry meal={"lunch"} date={dateInt} />
                 </div>
               </div>
             </div>
@@ -288,13 +296,13 @@ const Diary = () => {
                   {foodData?.dinner.map((item, index) => (
                     <div key={index}><p>Name: {item.name}</p>
                       <p>Units: {item.units}</p>
-                      <p>Calories: {item.calories_unit}</p>
-                      <p>Protein: {item.protein_unit}</p>
-                      <p>Carbs: {item.carbs_unit}</p>
+                      <p>Calories: {item.calories}</p>
+                      <p>Protein: {item.protein}</p>
+                      <p>Carbs: {item.carbohydrates}</p>
                       <p>Fat: {item.fat_unit}</p>
                     </div>
                   ))}
-                  <button>Add Entry</button>
+                  <AddEntry meal={"dinner"} date={dateInt} />
                 </div>
               </div>
             </div>

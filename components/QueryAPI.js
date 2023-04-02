@@ -2,11 +2,19 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Nanum_Brush_Script } from "@next/font/google";
 import Modal from "react-modal";
+import { doc, getDoc, setDoc, collection, getDocs, addDoc, docs } from "firebase/firestore";
+import { auth, firestore } from "../pages/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+
 
 const NUTRITIONIX_APP_ID = "8d0ff95b";
 const NUTRITIONIX_APP_KEY = "df26571e03064f5e3a49b78a9b746c68";
 
 const customStyles = {
+  overlay: {
+    backgroundColor: "rgba(0,0,0, 0.4)",
+    zIndex: 9999,
+  },
   content: {
     top: "50%",
     left: "50%",
@@ -17,7 +25,8 @@ const customStyles = {
   },
 };
 
-function App() {
+const App = ({ meal, date }) => {
+  const [user, loading, error] = useAuthState(auth);
   const [results, setResults] = useState(null);
   const [query, setQuery] = useState("");
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -51,8 +60,39 @@ function App() {
     setIsOpen(false);
   };
 
+  const addFood = async () => {
+
+    const originalDate = date;
+    const dateObj = new Date(originalDate);
+    const formattedDate = dateObj.toLocaleDateString("en-GB").replace(/\//g, "-").toString();
+
+    const userRef = doc(firestore, "users", user.uid);
+    //Food Diary
+    const docRef = doc(userRef, "foodDiary", formattedDate)
+    const diaryRef = collection(userRef, "foodDiary", formattedDate, meal);
+
+    const dummyData = { exists: "true" };
+    const foodData = {
+      name: modalData.fields.item_name,
+      brand: modalData.fields.brand_name,
+      calories: modalData.fields.nf_calories,
+      protein: modalData.fields.nf_protein,
+      fat: modalData.fields.nf_total_fat,
+      carbohydrates: modalData.fields.nf_total_carbohydrate,
+    };
+
+    await setDoc(docRef, dummyData);
+    await addDoc(diaryRef, foodData);
+
+    setModalData(null);
+    closeModal();
+  };
+
+
+
   return (
     <div>
+      <h1>Add {meal} food for {date} </h1>
       <form onSubmit={handleSubmit}>
         <label>
           Search for food:
@@ -102,6 +142,7 @@ function App() {
         onRequestClose={closeModal}
         style={customStyles}
         contentLabel="Food Modal"
+        portalClassName="modal-portal"
       >
         <h2 id="modal-title" style={{ color: "black" }}>
           {modalData ? modalData.fields.item_name : null}
@@ -124,7 +165,7 @@ function App() {
         </p>
         <div className="diary-btn-columns">
           <button onClick={closeModal}>Close</button>
-          <button> Add to Diary</button>
+          <button onClick={addFood}> Add to Diary</button>
         </div>
       </Modal>
     </div>
