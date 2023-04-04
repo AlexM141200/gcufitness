@@ -9,6 +9,7 @@ function WorkoutChild({ formData, onDelete, saveWorkout }) {
         onDelete(index, formType);
     };
 
+
     return (
         <div className={styles.workoutContainer}>
             <Card style={{ backgroundColor: "rgba(0,0,0, 0.4)", color: "white", padding: "35px" }}>
@@ -20,8 +21,8 @@ function WorkoutChild({ formData, onDelete, saveWorkout }) {
                     <div key={`strength${index}`}>
                         <Card css={{ bg: "$black", w: "100%", scale: ".8", color: "white" }}>
                             <div className={styles.exerciseContainer}>
-                                <p>Exercise Name: {data.name}</p>
-                                <p>Weight: {data.weight}</p>
+                                <p>Exercise Name: {data.exerciseName}</p>
+                                <p>Sets: {data.sets}</p>
                                 <p>Repetitions: {data.repetitions}</p>
                                 {data.notes !== "" && <p>Notes: {data.notes}</p>}
                                 <div className={styles.deleteButtonContainer}>

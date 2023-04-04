@@ -13,7 +13,7 @@ const exerciseLibrary = [
     },
     {
         id: 3,
-        name: "Dumbbell Incline Bench Press",
+        name: "Dumbbell Incline Bench",
         apiId: "0314",
         bodyPart: "Chest"
     },
@@ -91,7 +91,7 @@ const exerciseLibrary = [
     },
     {
         id: 16,
-        name: "Cable Single Arm Tricep Pushdown",
+        name: "Cable Single Arm Pushdown",
         apiId: "1723",
         bodyPart: "Triceps"
     },

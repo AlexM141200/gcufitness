@@ -5,27 +5,25 @@ import CardioExercise from "./CardioExercise.js";
 import WorkoutChild from "./WorkoutChild.js";
 import styles from "../../styles/CreateWorkout.module.css";
 
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, firestore } from "../../pages/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-
 
 function NewWorkout() {
     const [selectedForm, setSelectedForm] = useState(null);
     const [formData, setFormData] = useState({ strength: [], cardio: [] });
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleFormSubmit = (e, formType) => {
+    const handleFormSubmit = (e, formType, exerciseName) => {
         e.preventDefault();
         const form = e.target;
         const data = new FormData(form);
+        const newData = { ...Object.fromEntries(data), exerciseName };
         setFormData((prevFormData) => ({
             ...prevFormData,
-            [formType]: [...prevFormData[formType], Object.fromEntries(data)],
+            [formType]: [...prevFormData[formType], newData],
         }));
         form.reset();
         setIsModalOpen(false);
     };
+
 
     const handleDelete = (index, formType) => {
         setFormData((prevFormData) => {
@@ -68,7 +66,7 @@ function NewWorkout() {
                 overlayClassName={styles.modalOverlay}
             >
                 {selectedForm === "strength" ? (
-                    <StrengthExercise onSubmit={(e) => handleFormSubmit(e, "strength")} />
+                    <StrengthExercise onSubmit={(e, type, selectedExercise) => handleFormSubmit(e, "strength", selectedExercise)} />
                 ) : (
                     <CardioExercise onSubmit={(e) => handleFormSubmit(e, "cardio")} />
                 )}
