@@ -47,15 +47,17 @@ const Diary = () => {
     ],
   };
 
+  const maxCalories = 2600;
+
   const calorieData = {
     labels: ['Daily Calories', 'Remaining Calories'],
     datasets: [
       {
         label: 'Total Calories',
-        data: [1500, 2600],
+        data: [foodData.totalCalories, maxCalories - foodData.totalCalories],
         backgroundColor: [
-          'rgba(54, 162, 235, 0.2)',
-          'rgb(102,153,204)'
+          'rgb(102,153,204)',
+          'rgba(54, 162, 235, 0.2)'
         ],
         borderColor: [
           'rgba(54, 162, 235, 0.2)',
