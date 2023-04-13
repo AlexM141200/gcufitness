@@ -10,8 +10,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { Pie } from 'react-chartjs-2';
 import { Chart, ArcElement } from 'chart.js'
 import 'chart.js/auto';
-import { Table } from "@nextui-org/react";
-
+import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
 
 registerLocale("enGB", enGB);
@@ -25,6 +24,7 @@ const Diary = () => {
     lunch: [],
     dinner: [],
   });
+
 
   const macroData = {
     labels: ['Fats', 'Carbohydrates', 'Protein'],
@@ -96,8 +96,7 @@ const Diary = () => {
     const diaryDate = date.toLocaleDateString("en-GB").replace(/\//g, "-");
     const diaryRef = doc(userRef, "foodDiary", diaryDate);
     const diaryDocSnap = await getDoc(diaryRef);
-    console.log(diaryRef);
-    console.log(diaryDocSnap.data);
+
 
     if (diaryDocSnap.exists()) {
       const diaryData = diaryDocSnap.data();
@@ -110,8 +109,7 @@ const Diary = () => {
       // Retrieve all documents in the breakfast subcollection
       const breakfastQuerySnap = await getDocs(breakfastRef);
       const breakfastData = breakfastQuerySnap.docs.map((doc) => doc.data());
-      console.log(breakfastData);
-      console.log(breakfastQuerySnap);
+
 
       // Retrieve all documents in the lunch subcollection
       const lunchQuerySnap = await getDocs(lunchRef);
@@ -168,7 +166,7 @@ const Diary = () => {
       const totalFat = totalBreakfastFat + totalLunchFat + totalDinnerFat;
       const totalCarbs = totalBreakfastCarbs + totalLunchCarbs + totalDinnerCarbs;
 
-      // Update the state with the breakfast, lunch, and dinner data
+
       setFoodData((prevState) => ({
         ...prevState,
         breakfast: breakfastData,
@@ -180,7 +178,6 @@ const Diary = () => {
         totalCarbs: totalCarbs,
       }));
     } else {
-      // If no entries are found, clear the breakfast, lunch, and dinner fields
       setFoodData({
         breakfast: [],
         lunch: [],
@@ -195,7 +192,6 @@ const Diary = () => {
       let totalFat = 0;
       let totalCarbs = 0;
 
-      // Calculate totals for breakfast, lunch, and dinner
       ["breakfast", "lunch", "dinner"].forEach((meal) => {
         foodData[meal].forEach((item) => {
           totalCalories += item.calories * item.units;
@@ -217,7 +213,6 @@ const Diary = () => {
 
     return (
       <>
-        {/* previous code */}
         <div className="totalCalories">Total Calories: {totalCalories}</div>
         <div className="totalProtein">Total Protein: {totalProtein}</div>
         <div className="totalFat">Total Fat: {totalFat}</div>
@@ -230,98 +225,164 @@ const Diary = () => {
     <>
       {user ? (
         <div>
-          <h1>Food Diary For Today</h1>
-          <div className="date-picker-container">
-            <button
-              onClick={() =>
-                setSelectedDate(new Date(selectedDate.getTime() - 86400000))
-              }
-            >
-              <i>Previous</i>
-            </button>
-            <DatePicker
-              selected={selectedDate}
-              onChange={(date) => setSelectedDate(date)}
-              dateFormat="yyyy/dd/MM"
-            />
-            <button
-              onClick={() =>
-                setSelectedDate(new Date(selectedDate.getTime() + 86400000))
-              }
-            >
-              <i>Next</i>
-            </button>
-          </div>
+          <div>
+            <div>
+              <h1>Food Diary For Today</h1>
+              <div className="date-picker-container">
+                <button
+                  onClick={() =>
+                    setSelectedDate(new Date(selectedDate.getTime() - 86400000))
+                  }
+                >
+                  <i>Previous</i>
+                </button>
+                <DatePicker
+                  selected={selectedDate}
+                  onChange={(date) => setSelectedDate(date)}
+                  dateFormat="yyyy/dd/MM"
+                />
+                <button
+                  onClick={() =>
+                    setSelectedDate(new Date(selectedDate.getTime() + 86400000))
+                  }
+                >
+                  <i>Next</i>
+                </button>
+                <button onClick={() =>
+                  setSelectedDate(new Date(selectedDate))}>
+                  <i>Reload</i>
+                </button>
+              </div>
 
-          <div className="container">
-            <div className="breakfast">
-              <div className="foodItem">
-                <h1>Breakfast</h1>
-                <div className="foodData" style={{ borderRadius: "10px" }}>
-                  {foodData?.breakfast.map((item, index) => (
-                    <div key={index}><p>Name: {item.name}</p>
-                      <p>Units: {item.units}</p>
-                      <p>Calories: {item.calories}</p>
-                      <p>Protein: {item.protein}</p>
-                      <p>Carbs: {item.carbohydrates}</p>
-                      <p>Fat: {item.fat}</p>
-                    </div>
-
-                  ))}
+              <div className="container">
+                <div className="breakfast">
+                  <div className="foodItem">
+                    <h1>Breakfast</h1>
+                    <TableContainer component={Paper}>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Name</TableCell>
+                            <TableCell align="right">Units</TableCell>
+                            <TableCell align="right">Calories</TableCell>
+                            <TableCell align="right">Protein</TableCell>
+                            <TableCell align="right">Carbs</TableCell>
+                            <TableCell align="right">Fat</TableCell>
+                            <TableCell></TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {foodData.breakfast.map((item, index) => (
+                            <TableRow key={index}>
+                              <TableCell component="th" scope="row">{item.name}</TableCell>
+                              <TableCell align="right">{item.units ?? 1}</TableCell>
+                              <TableCell align="right">{item.calories}</TableCell>
+                              <TableCell align="right">{item.protein}</TableCell>
+                              <TableCell align="right">{item.carbohydrates}</TableCell>
+                              <TableCell align="right">{item.fat}</TableCell>
+                              <TableCell align="right">
+                                <Button variant="contained" color="error" onClick={() => handleDelete('breakfast', index)}>Delete</Button>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </div>
                   <AddEntry meal={"breakfast"} date={dateInt} />
                 </div>
-              </div>
-            </div>
 
-            <div className="lunch">
-              <div className="foodItem">
-                <h1>Lunch</h1>
-                <div className="foodData" style={{ borderRadius: "10px" }}>
-                  {foodData?.lunch.map((item, index) => (
-                    <div key={index}><p>Name: {item.name}</p>
-                      <p>Units: {item.units}</p>
-                      <p>Calories: {item.calories}</p>
-                      <p>Protein: {item.protein}</p>
-                      <p>Carbs: {item.carbohydrates}</p>
-                      <p>Fat: {item.fat}</p>
-                    </div>
-                  ))}
+                <div className="lunch">
+                  <div className="foodItem">
+                    <h1>Lunch</h1>
+                    <TableContainer component={Paper}>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Name</TableCell>
+                            <TableCell align="right">Units</TableCell>
+                            <TableCell align="right">Calories</TableCell>
+                            <TableCell align="right">Protein</TableCell>
+                            <TableCell align="right">Carbs</TableCell>
+                            <TableCell align="right">Fat</TableCell>
+                            <TableCell></TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {foodData.lunch.map((item, index) => (
+                            <TableRow key={index}>
+                              <TableCell component="th" scope="row">{item.name}</TableCell>
+                              <TableCell align="right">{item.units ?? 1}</TableCell>
+                              <TableCell align="right">{item.calories}</TableCell>
+                              <TableCell align="right">{item.protein}</TableCell>
+                              <TableCell align="right">{item.carbohydrates}</TableCell>
+                              <TableCell align="right">{item.fat}</TableCell>
+                              <TableCell align="right">
+                                <Button variant="contained" color="error" onClick={() => handleDelete('lunch', index)}>Delete</Button>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </div>
                   <AddEntry meal={"lunch"} date={dateInt} />
                 </div>
-              </div>
-            </div>
 
-            <div className="dinner">
-              <div className="foodItem">
-                <h1>Dinner</h1>
-                <div className="foodData" style={{ borderRadius: "10px" }}>
-                  {foodData?.dinner.map((item, index) => (
-                    <div key={index}><p>Name: {item.name}</p>
-                      <p>Units: {item.units}</p>
-                      <p>Calories: {item.calories}</p>
-                      <p>Protein: {item.protein}</p>
-                      <p>Carbs: {item.carbohydrates}</p>
-                      <p>Fat: {item.fat_unit}</p>
-                    </div>
-                  ))}
+                <div className="dinner">
+                  <div className="foodItem">
+                    <h1>Dinner</h1>
+                    <TableContainer component={Paper}>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Name</TableCell>
+                            <TableCell align="right">Units</TableCell>
+                            <TableCell align="right">Calories</TableCell>
+                            <TableCell align="right">Protein</TableCell>
+                            <TableCell align="right">Carbs</TableCell>
+                            <TableCell align="right">   Fat</TableCell>
+                            <TableCell></TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {foodData.dinner.map((item, index) => (
+                            <TableRow key={index}>
+                              <TableCell component="th" scope="row">{item.name}</TableCell>
+                              <TableCell align="right">{item.units ?? 1}</TableCell>
+                              <TableCell align="right">{item.calories}</TableCell>
+                              <TableCell align="right">{item.protein}</TableCell>
+                              <TableCell align="right">{item.carbohydrates}</TableCell>
+                              <TableCell align="right">{item.fat}</TableCell>
+                              <TableCell align="right">
+                                <Button variant="contained" color="error" onClick={() => handleDelete('dinner', index)}>Delete</Button>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </div>
                   <AddEntry meal={"dinner"} date={dateInt} />
                 </div>
               </div>
             </div>
-            <br />
-            <br />
-            <div className="totalCalories">Total Calories {foodData?.totalCalories}</div>
-            <div className="totalProtein">Total Protein {foodData?.totalProtein}</div>
-            <div className="totalFat">Total Fat {foodData?.totalFat}</div>
-            <div className="totalCarbs">Total Carbs {foodData?.totalCarbs}</div>
-            <div style={{ width: 600, height: 400, display: "flex" }} >
-              <Pie data={calorieData} options={options} width={100} height={50}
-              />
-              <Pie data={macroData} options={options} width={100} height={50}
-              />
-            </div>
+          </div>
+
+          <br />
+          <br />
+          <div className="totalCalories">Total Calories {foodData?.totalCalories}</div>
+          <div className="totalProtein">Total Protein {foodData?.totalProtein}</div>
+          <div className="totalFat">Total Fat {foodData?.totalFat}</div>
+          <div className="totalCarbs">Total Carbs {foodData?.totalCarbs}</div>
+          <div style={{ width: 600, height: 400, display: "flex" }} >
+            <Pie data={calorieData} options={options} width={100} height={50}
+            />
+            <Pie data={macroData} options={options} width={100} height={50}
+            />
           </div>
         </div>
+
       ) : (
         <div>Loading...</div>
       )}
