@@ -30,7 +30,6 @@ const StrengthExercise = ({ onSubmit }) => {
 
     };
 
-
     const handleFormSubmit = (e) => {
         e.preventDefault();
         onSubmit(e, "strength", selectedExercise);

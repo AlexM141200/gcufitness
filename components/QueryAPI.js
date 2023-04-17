@@ -89,7 +89,6 @@ const App = ({ meal, date }) => {
   };
 
 
-
   return (
     <div>
       <h1>Add {meal} food for {date} </h1>

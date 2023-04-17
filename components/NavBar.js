@@ -60,9 +60,9 @@ const NavBar = () => {
           </Navbar.Item>
           <Navbar.Item width={isSmallScreen ? 'auto' : '1/4'}>
             <Navbar.Link block color="secondary" css={{ color: "white" }}
-              href="/calorieTracker"
+              href="/messaging"
             >
-              Calorie Tracker
+              Chat!
             </Navbar.Link>
           </Navbar.Item>
           <Dropdown>

@@ -5,12 +5,14 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, firestore } from "../pages/firebase";
 import { Button } from "@nextui-org/react";
 
+console.log("login");
+
 const Login = () => {
   const [user, setUser] = useAuthState(auth);
 
   // Create a new GoogleAuthProvider instance
   const googleAuthProvider = new GoogleAuthProvider();
-  console.log("login");
+
   const router = useRouter();
 
   const handleLogin = async () => {

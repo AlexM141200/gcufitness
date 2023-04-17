@@ -91,7 +91,6 @@ const Diary = () => {
   }, [selectedDate, user]);
 
   const fetchFoodData = async (date) => {
-
     const userRef = doc(firestore, "users", user.uid);
     const diaryDate = date.toLocaleDateString("en-GB").replace(/\//g, "-");
     const diaryRef = doc(userRef, "foodDiary", diaryDate);
@@ -99,8 +98,6 @@ const Diary = () => {
 
 
     if (diaryDocSnap.exists()) {
-      const diaryData = diaryDocSnap.data();
-
       // Fetch breakfast, lunch and dinner subcollections
       const breakfastRef = collection(diaryRef, "breakfast");
       const lunchRef = collection(diaryRef, "lunch");
@@ -147,18 +144,18 @@ const Diary = () => {
         return total + item.carbohydrates;// * item.units;
       }, 0);
 
-      // Calculate total macronutrient values for breakfast
+      // Calculate total macronutrient values for dinner
       const totalDinnerCalories = dinnerData.reduce((total, item) => {
-        return total + item.calories;// * item.units;
+        return total + item.calories;
       }, 0);
       const totalDinnerProtein = dinnerData.reduce((total, item) => {
-        return total + item.protein;// * item.units;
+        return total + item.protein;
       }, 0);
       const totalDinnerFat = dinnerData.reduce((total, item) => {
-        return total + item.fat;// * item.units;
+        return total + item.fat;
       }, 0);
       const totalDinnerCarbs = dinnerData.reduce((total, item) => {
-        return total + item.carbohydrates;// * item.units;
+        return total + item.carbohydrates;
       }, 0);
 
       const totalCalories = totalBreakfastCalories + totalLunchCalories + totalDinnerCalories;
@@ -184,7 +181,6 @@ const Diary = () => {
         dinner: [],
       });
     }
-
 
     const calculateTotals = () => {
       let totalCalories = 0;
