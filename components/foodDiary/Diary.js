@@ -1,7 +1,7 @@
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { setDefaultLocale, registerLocale } from "react-datepicker";
-import { doc, getDoc, setDoc, collection, getDocs, docs } from "firebase/firestore";
+import { query, deleteDoc, doc, getDoc, setDoc, collection, getDocs, docs, where } from "firebase/firestore";
 import { enGB } from "date-fns/locale/en-GB";
 import React, { useState, useEffect } from "react";
 import AddEntry from "./AddEntry";
@@ -25,13 +25,34 @@ const Diary = () => {
     dinner: [],
   });
 
+  const [maxCalories, setMaxCalories] = useState(0);
+
+  const [proteinGoal, carbGoal, fatGoal] = [0, 0, 0];
+
+  const getUserMaxCalories = async () => {
+    const userRef = doc(firestore, "users", user.uid, "userGoals", "userProfile");
+    const userDoc = await getDoc(userRef);
+    const userData = userDoc.data();
+    const maxCalories = userData.recommendedCalories;
+    setMaxCalories(maxCalories);
+  };
+
+  useEffect(() => {
+    if (user) {
+      getUserMaxCalories();
+    }
+  }, [user]);
+
+
+
+
 
   const macroData = {
     labels: ['Fats', 'Carbohydrates', 'Protein'],
     datasets: [
       {
         label: '# of Votes',
-        data: [12, 19, 3],
+        data: [foodData.totalFat, foodData.totalCarbs, foodData.totalProtein],
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',
@@ -47,7 +68,6 @@ const Diary = () => {
     ],
   };
 
-  const maxCalories = 2600;
 
   const calorieData = {
     labels: ['Daily Calories', 'Remaining Calories'],
@@ -81,7 +101,33 @@ const Diary = () => {
     }
   };
 
-  //change date based on selected date from date picker
+
+
+
+  const handleDelete = async (meal, name) => {
+    const originalDate = selectedDate;
+    const dateObj = new Date(originalDate);
+    const formattedDate = dateObj.toLocaleDateString("en-GB").replace(/\//g, "-").toString();
+
+    const userRef = doc(firestore, "users", user.uid);
+    const diaryRef = collection(userRef, "foodDiary", formattedDate, meal);
+
+    if (name) {
+      const querySnapshot = await getDocs(query(diaryRef, where("name", "==", name)));
+      const docToDelete = querySnapshot.docs[0];
+
+      if (docToDelete.exists()) {
+        await deleteDoc(docToDelete.ref);
+        console.log(`${name} has been deleted from the ${meal} meal.`);
+      } else {
+        console.log(`The document with name ${name} does not exist.`);
+      }
+    } else {
+      console.log(`The name variable is undefined or null.`);
+    }
+  };
+
+
   useEffect(() => {
     if (user) {
       fetchFoodData(selectedDate);
@@ -182,39 +228,7 @@ const Diary = () => {
       });
     }
 
-    const calculateTotals = () => {
-      let totalCalories = 0;
-      let totalProtein = 0;
-      let totalFat = 0;
-      let totalCarbs = 0;
 
-      ["breakfast", "lunch", "dinner"].forEach((meal) => {
-        foodData[meal].forEach((item) => {
-          totalCalories += item.calories * item.units;
-          totalProtein += item.protein * item.units;
-          totalFat += item.fat * item.units;
-          totalCarbs += item.carbohydrates * item.units;
-        });
-      });
-
-      return {
-        totalCalories,
-        totalProtein,
-        totalFat,
-        totalCarbs,
-      };
-    };
-
-    const { totalCalories, totalProtein, totalFat, totalCarbs } = calculateTotals();
-
-    return (
-      <>
-        <div className="totalCalories">Total Calories: {totalCalories}</div>
-        <div className="totalProtein">Total Protein: {totalProtein}</div>
-        <div className="totalFat">Total Fat: {totalFat}</div>
-        <div className="totalCarbs">Total Carbs: {totalCarbs}</div>
-      </>
-    );
   };
 
   return (
@@ -277,7 +291,7 @@ const Diary = () => {
                               <TableCell align="right">{item.carbohydrates}</TableCell>
                               <TableCell align="right">{item.fat}</TableCell>
                               <TableCell align="right">
-                                <Button variant="contained" color="error" onClick={() => handleDelete('breakfast', index)}>Delete</Button>
+                                <Button variant="contained" color="error" onClick={() => handleDelete('breakfast', item.name)}>Delete</Button>
                               </TableCell>
                             </TableRow>
                           ))}
@@ -314,7 +328,7 @@ const Diary = () => {
                               <TableCell align="right">{item.carbohydrates}</TableCell>
                               <TableCell align="right">{item.fat}</TableCell>
                               <TableCell align="right">
-                                <Button variant="contained" color="error" onClick={() => handleDelete('lunch', index)}>Delete</Button>
+                                <Button variant="contained" color="error" onClick={() => handleDelete('lunch', item.name)}>Delete</Button>
                               </TableCell>
                             </TableRow>
                           ))}
@@ -351,7 +365,7 @@ const Diary = () => {
                               <TableCell align="right">{item.carbohydrates}</TableCell>
                               <TableCell align="right">{item.fat}</TableCell>
                               <TableCell align="right">
-                                <Button variant="contained" color="error" onClick={() => handleDelete('dinner', index)}>Delete</Button>
+                                <Button variant="contained" color="error" onClick={() => handleDelete('dinner', item.name)}>Delete</Button>
                               </TableCell>
                             </TableRow>
                           ))}
@@ -367,16 +381,24 @@ const Diary = () => {
 
           <br />
           <br />
-          <div className="totalCalories">Total Calories {foodData?.totalCalories}</div>
-          <div className="totalProtein">Total Protein {foodData?.totalProtein}</div>
-          <div className="totalFat">Total Fat {foodData?.totalFat}</div>
-          <div className="totalCarbs">Total Carbs {foodData?.totalCarbs}</div>
+
+
           <div style={{ width: 600, height: 400, display: "flex" }} >
-            <Pie data={calorieData} options={options} width={100} height={50}
-            />
-            <Pie data={macroData} options={options} width={100} height={50}
-            />
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <Pie data={calorieData} options={options} width={100} height={50} />
+              <div className="totalCalories">Total Calories {foodData?.totalCalories}</div>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <Pie data={macroData} options={options} width={100} height={50} />
+              <div className="totalProtein">Total Protein {foodData?.totalProtein}</div>
+              <div className="totalFat">Total Fat {foodData?.totalFat}</div>
+              <div className="totalCarbs">Total Carbs {foodData?.totalCarbs}</div>
+            </div>
           </div>
+
+
+
         </div>
 
       ) : (

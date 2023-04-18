@@ -13,7 +13,6 @@ import { useRef } from "react";
 
 function Chat() {
 
-
     return (
         <div className={styles.Chat}>
             <header className={styles.Chat.header}>
@@ -34,7 +33,6 @@ function ChatRoom() {
     const q = query(messageRef, orderBy("createdAt"), limit(25));
     const [messages] = useCollectionData(q, { idField: "id" });
     const [formValue, setFormValue] = useState("");
-
 
 
     const sendMessage = async (e) => {
