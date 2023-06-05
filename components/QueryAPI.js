@@ -5,10 +5,9 @@ import Modal from "react-modal";
 import { doc, getDoc, setDoc, collection, getDocs, addDoc, docs } from "firebase/firestore";
 import { auth, firestore } from "../pages/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../pages/firebase";
 
-
-const NUTRITIONIX_APP_ID = "8d0ff95b";
-const NUTRITIONIX_APP_KEY = "df26571e03064f5e3a49b78a9b746c68";
 
 const customStyles = {
   overlay: {
@@ -83,6 +82,7 @@ const App = ({ meal, date }) => {
 
     await setDoc(docRef, dummyData);
     await addDoc(diaryRef, foodData);
+    // logEvent(analytics, 'log_food', { user_id: uid });
 
     setModalData(null);
     closeModal();

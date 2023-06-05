@@ -1,6 +1,16 @@
 import React, { useState } from "react";
+import { auth, firestore } from "../pages/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Calculator = () => {
+
+  const [user, loading, error] = useAuthState(auth);
+
+  
+  const mildWeightLoss = 500;
+  const averageWeightLoss = 1000;
+  const extremeWeightLoss = 1500;
+
   function calculate(e) {
     e.preventDefault();
     const weight = parseFloat(document.getElementById("weightKG").value);
@@ -9,10 +19,16 @@ const Calculator = () => {
     const activityLevel = parseFloat(
       document.getElementById("activityLevel").value
     );
+    const goal = document.getElementById("weightLossGoal");
+
+     
+
     const calculatedCalories =
-      (66.5 + 13.75 * weight + 5.003 * height - 4.676 * age) * activityLevel;
+     (((66.5 + 13.75 * weight + 5.003 * height - 4.676 * age) * activityLevel) - goal);
     setCalories(calculatedCalories);
   }
+
+
 
   const [calories, setCalories] = useState(null);
 
@@ -38,6 +54,14 @@ const Calculator = () => {
           <option value="1.5">1.550 - Moderate-Intense Activity</option>
           <option value="1.725">1.725 - Heavy Activity</option>
           <option value="1.9">1.9 - Rigorous Activity</option>
+        </select>
+        <label htmlFor="Goal">
+          What is your weight loss goal?
+        </label>
+        <select className="weightLossGoal" id="weightLossGoal">
+          <option value="500">Mild Weight Loss - 1lb per week</option>
+          <option value="750">Average Weight Loss - 1.5lb per week</option>
+          <option value="1000">Extreme Weight Loss - 2lb per week (Please consult a doctor before choosing this option!)</option>
         </select>
         <br />
         <button type="submit"> Calculate!</button>

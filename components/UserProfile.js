@@ -30,6 +30,7 @@ const UserProfile = () => {
         weight: 0,
         age: 0,
         activityLevel: 0,
+        loggedWeights: [],
         originalWeight: 0
       });
     }

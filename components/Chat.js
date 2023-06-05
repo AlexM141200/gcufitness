@@ -3,12 +3,12 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { auth, firestore } from "../pages/firebase";
 import { doc, serverTimestamp, getDoc, addDoc, setDoc, collection, getDocs, docs, orderBy, query, limit } from "firebase/firestore";
 import { useState } from "react";
-import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
-import { getAnalytics, logEvent } from "firebase/analytics";
+import { logEvent } from "firebase/analytics";
 import styles from "../styles/Chat.module.css";
 import { useRef } from "react";
+import { analytics } from "../pages/firebase";
 
 
 function Chat() {
@@ -33,12 +33,10 @@ function ChatRoom() {
     const q = query(messageRef, orderBy("createdAt"), limit(25));
     const [messages] = useCollectionData(q, { idField: "id" });
     const [formValue, setFormValue] = useState("");
-
+ 
 
     const sendMessage = async (e) => {
-        const analytics = getAnalytics();
         e.preventDefault();
-
         const { uid, photoURL } = auth.currentUser;
 
         await addDoc(collection(firestore, "messages"), {
@@ -47,9 +45,9 @@ function ChatRoom() {
             uid,
             photoURL
         });
-
         setFormValue("");
         dummy.current.scrollIntoView({ behavior: 'smooth' });
+        console.log(analytics);
         logEvent(analytics, 'send_message', { user_id: uid });
     }
 

@@ -25,6 +25,10 @@ function NewWorkout() {
     };
 
 
+    const handleClearFormData = () => {
+        setFormData({ strength: [], cardio: [] });
+    };
+
     const handleDelete = (index, formType) => {
         setFormData((prevFormData) => {
             const updatedFormData = { ...prevFormData };
@@ -32,10 +36,6 @@ function NewWorkout() {
             return updatedFormData;
         });
     };
-
-    const saveWorkout = () => {
-
-    }
 
     const handleOpenForm = (formType) => {
         setSelectedForm(formType);
@@ -71,7 +71,7 @@ function NewWorkout() {
                     <CardioExercise onSubmit={(e) => handleFormSubmit(e, "cardio")} />
                 )}
             </Modal>
-            <WorkoutChild formData={formData} onDelete={handleDelete} saveWorkout={saveWorkout} />
+            <WorkoutChild formData={formData} onDelete={handleDelete} handleClearFormData={handleClearFormData} />
         </div>
     );
 }

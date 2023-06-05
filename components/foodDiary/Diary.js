@@ -7,6 +7,7 @@ import React, { useState, useEffect } from "react";
 import AddEntry from "./AddEntry";
 import { auth, firestore } from "../../pages/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { useDocumentData, useCollectionData } from "react-firebase-hooks/firestore";
 import { Pie } from 'react-chartjs-2';
 import { Chart, ArcElement } from 'chart.js'
 import 'chart.js/auto';
@@ -15,7 +16,7 @@ import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRo
 
 registerLocale("enGB", enGB);
 
-const Diary = () => {
+function Diary() {
   const [user, loading, error] = useAuthState(auth);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [dateInt, setDateInt] = useState(selectedDate.toDateString());
@@ -24,6 +25,7 @@ const Diary = () => {
     lunch: [],
     dinner: [],
   });
+
 
   const [maxCalories, setMaxCalories] = useState(0);
 
@@ -45,13 +47,11 @@ const Diary = () => {
 
 
 
-
-
   const macroData = {
     labels: ['Fats', 'Carbohydrates', 'Protein'],
     datasets: [
       {
-        label: '# of Votes',
+        label: 'Grams',
         data: [foodData.totalFat, foodData.totalCarbs, foodData.totalProtein],
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
@@ -230,6 +230,40 @@ const Diary = () => {
 
 
   };
+
+
+  /*
+    const userRef = doc(firestore, "users", user.uid);
+    const diaryDate = selectedDate.toLocaleDateString("en-GB").replace(/\//g, "-");
+    const diaryRef = doc(userRef, "foodDiary", diaryDate);
+  
+    const breakfastRef = collection(diaryRef, "breakfast");
+    const lunchRef = collection(diaryRef, "lunch");
+    const dinnerRef = collection(diaryRef, "dinner")
+  
+  
+    const [breakfastTest] = useCollectionData(breakfastRef);
+    const [lunchTest] = useCollectionData(lunchRef);
+    const [dinnerTest] = useCollectionData(dinnerRef);
+    console.log(breakfastTest);
+  
+    const calculateTotal = (array) => {
+      return array.reduce((accumulator, currentValue) => {
+        return {
+          calories: accumulator.calories + currentValue.calories,
+          fat: accumulator.fat + currentValue.fat,
+          protein: accumulator.protein + currentValue.protein,
+        };
+      }, { calories: 0, fat: 0, protein: 0 });
+    };
+  */
+  //const breakfastTotals = calculateTotal(breakfastTest);
+  //const lunchTotals = calculateTotal(lunchTest);
+  //const dinnerTotals = calculateTotal(dinnerTest);
+
+  // console.log("Breakfast totals: ", breakfastTotals);
+  //console.log("Lunch totals: ", lunchTotals);
+  //console.log("Dinner totals: ", dinnerTotals);
 
   return (
     <>
